@@ -12,7 +12,7 @@ export default function App() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:8000/analyze', {
+      const res = await axios.post('https://triagegenie-backend.onrender.com/analyze', {
         responses: { context },
       });
       setSummary(res.data.summary || 'No summary returned.');
