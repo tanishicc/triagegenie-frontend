@@ -1,4 +1,4 @@
-// src/App.jsx (final formatting fix + preprocessing AI response)
+// src/App.jsx (simple version - show raw bullets)
 import { useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -15,15 +15,7 @@ export default function App() {
       const res = await axios.post('https://triagegenie-backend.onrender.com/analyze', {
         responses: { context },
       });
-      let aiText = res.data.summary || 'No summary returned.';
-
-      // ✅ Clean up formatting
-      aiText = aiText
-        .replace(/\*\*(.+?)\*\*/g, '\n**$1**') // move headings to new line
-        .replace(/(?<!\n)[-•*]\s/g, '\n- ')      // enforce bullets on new lines
-        .trim();
-
-      setSummary(aiText);
+      setSummary(res.data.summary || 'No summary returned.');
     } catch (err) {
       setSummary('Error analyzing triage data.');
     }
@@ -38,26 +30,6 @@ export default function App() {
     const lines = doc.splitTextToSize(summary, 180);
     doc.text(lines, 10, 20);
     doc.save(`triage-report.pdf`);
-  };
-
-  const formatSummary = (text) => {
-    const sections = text.split(/(?=\n\*\*.+?\*\*)/);
-    return sections.map((section, index) => {
-      const lines = section.trim().split(/\n/).filter(line => line.trim() !== '');
-      const title = lines[0]?.replace(/\*\*/g, '').trim();
-      const bullets = lines.slice(1).filter(line => /^[-•*]/.test(line));
-
-      return (
-        <div key={index} className="styled-section">
-          {title && <h3 className="styled-section-title">{title}</h3>}
-          <ul className="styled-bullet-list">
-            {bullets.map((line, i) => (
-              <li key={i} className="styled-bullet-item">{line.replace(/^[-•*]\s/, '').trim()}</li>
-            ))}
-          </ul>
-        </div>
-      );
-    });
   };
 
   return (
@@ -86,7 +58,7 @@ export default function App() {
         {summary && (
           <div className="summary-box">
             <h2 className="summary-title">AI Summary</h2>
-            <div>{formatSummary(summary)}</div>
+            <pre style={{ textAlign: 'left', whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{summary}</pre>
           </div>
         )}
       </div>
