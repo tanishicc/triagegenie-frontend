@@ -1,4 +1,4 @@
-// src/App.jsx (improved formatting)
+// src/App.jsx (final formatting fix for clean block structure)
 import { useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -35,15 +35,16 @@ export default function App() {
   const formatSummary = (text) => {
     const sections = text.split(/(?=\n\*\*.+?\*\*)/);
     return sections.map((section, index) => {
-      const [rawTitle, ...bullets] = section.trim().split(/\n(?=[-•*]\s)/);
-      const title = rawTitle?.replace(/\*\*/g, '').trim();
+      const lines = section.trim().split(/\n/).filter(line => line.trim() !== '');
+      const title = lines[0]?.replace(/\*\*/g, '').trim();
+      const bullets = lines.slice(1).filter(line => /^[-•*]/.test(line));
 
       return (
         <div key={index} className="styled-section">
           {title && <h3 className="styled-section-title">{title}</h3>}
           <ul className="styled-bullet-list">
-            {bullets.map((bullet, i) => (
-              <li key={i} className="styled-bullet-item">{bullet.replace(/^[-•*]\s/, '').trim()}</li>
+            {bullets.map((line, i) => (
+              <li key={i} className="styled-bullet-item">{line.replace(/^[-•*]\s/, '').trim()}</li>
             ))}
           </ul>
         </div>
