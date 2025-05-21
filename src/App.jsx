@@ -33,27 +33,20 @@ export default function App() {
   };
 
   const formatSummary = (text) => {
-    const groupedSections = text.split(/(?=\n- \w+ Controls)/);
-    return groupedSections.map((section, index) => {
+    const sections = text.split(/(?=\n?\*\*.*\*\*)/);
+    return sections.map((section, index) => {
       const lines = section.trim().split('\n').filter(Boolean);
       if (lines.length === 0) return null;
 
       const titleLine = lines[0];
-      const controlType = titleLine.replace(/^- (\w+ Controls).*/, '$1');
-      const bullets = titleLine.replace(`- ${controlType}`, '').trim();
-      const extraLines = lines.slice(1);
-
-      const allBullets = [bullets, ...extraLines].filter(Boolean);
+      const bodyLines = lines.slice(1);
 
       return (
         <div key={index} className="section">
-          <div className="badge-container">
-            <span className="badge">{controlType}</span>
-            <div className="divider"></div>
-          </div>
+          <div className="section-title">{titleLine.replace(/\*\*/g, '')}</div>
           <ul className="summary-list">
-            {allBullets.map((line, i) => (
-              <li key={i}>{line.replace(/^- /, '').trim()}</li>
+            {bodyLines.map((line, i) => (
+              <li key={i}>{line.replace(/^[-•*] /, '').trim()}</li>
             ))}
           </ul>
         </div>
