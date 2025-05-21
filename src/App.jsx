@@ -1,4 +1,4 @@
-// src/App.jsx (plain CSS version)
+// src/App.jsx (styled for section blocks and spacing)
 import { useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -42,11 +42,11 @@ export default function App() {
       const bodyLines = lines.slice(1);
 
       return (
-        <div key={index} className="section">
-          <div className="section-title">{titleLine.replace(/\*\*/g, '')}</div>
-          <ul className="summary-list">
+        <div key={index} className="styled-section">
+          <h3 className="styled-section-title">{titleLine.replace(/\*\*/g, '')}</h3>
+          <ul className="styled-bullet-list">
             {bodyLines.map((line, i) => (
-              <li key={i}>{line.replace(/^[-•*] /, '').trim()}</li>
+              <li key={i} className="styled-bullet-item">{line.replace(/^[-•*] /, '').trim()}</li>
             ))}
           </ul>
         </div>
