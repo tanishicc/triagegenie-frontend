@@ -107,3 +107,10 @@ body {
   font-size: 1rem;
   line-height: 1.6;
 }
+.summary-output {
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1f2937;
+  white-space: pre-wrap;
+}
