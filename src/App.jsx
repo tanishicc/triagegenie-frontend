@@ -1,4 +1,4 @@
-// src/App.jsx (styled for section blocks and spacing)
+// src/App.jsx (improved formatting)
 import { useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -33,20 +33,17 @@ export default function App() {
   };
 
   const formatSummary = (text) => {
-    const sections = text.split(/(?=\n?\*\*.*\*\*)/);
+    const sections = text.split(/(?=\n\*\*.+?\*\*)/);
     return sections.map((section, index) => {
-      const lines = section.trim().split('\n').filter(Boolean);
-      if (lines.length === 0) return null;
-
-      const titleLine = lines[0];
-      const bodyLines = lines.slice(1);
+      const [rawTitle, ...bullets] = section.trim().split(/\n(?=[-•*]\s)/);
+      const title = rawTitle?.replace(/\*\*/g, '').trim();
 
       return (
         <div key={index} className="styled-section">
-          <h3 className="styled-section-title">{titleLine.replace(/\*\*/g, '')}</h3>
+          {title && <h3 className="styled-section-title">{title}</h3>}
           <ul className="styled-bullet-list">
-            {bodyLines.map((line, i) => (
-              <li key={i} className="styled-bullet-item">{line.replace(/^[-•*] /, '').trim()}</li>
+            {bullets.map((bullet, i) => (
+              <li key={i} className="styled-bullet-item">{bullet.replace(/^[-•*]\s/, '').trim()}</li>
             ))}
           </ul>
         </div>
