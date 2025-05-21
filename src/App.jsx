@@ -1,4 +1,4 @@
-// src/App.jsx (final formatting fix for clean block structure)
+// src/App.jsx (final formatting fix + preprocessing AI response)
 import { useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -15,7 +15,15 @@ export default function App() {
       const res = await axios.post('https://triagegenie-backend.onrender.com/analyze', {
         responses: { context },
       });
-      setSummary(res.data.summary || 'No summary returned.');
+      let aiText = res.data.summary || 'No summary returned.';
+
+      // ✅ Clean up formatting
+      aiText = aiText
+        .replace(/\*\*(.+?)\*\*/g, '\n**$1**') // move headings to new line
+        .replace(/(?<!\n)[-•*]\s/g, '\n- ')      // enforce bullets on new lines
+        .trim();
+
+      setSummary(aiText);
     } catch (err) {
       setSummary('Error analyzing triage data.');
     }
